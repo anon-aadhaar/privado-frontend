@@ -1,12 +1,15 @@
-import '../app/globals.css'
+import "../app/globals.css";
 import type { AppProps } from "next/app";
-import SelectedIssuerProvider from '@/providers/SelectedIssuerProvider';
+import SelectedIssuerProvider from "@/providers/SelectedIssuerProvider";
+import { AnonAadhaarProvider } from "@anon-aadhaar/react";
 
-function MyApp({Component, pageProps}: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SelectedIssuerProvider>
-      <Component {...pageProps} />
-    </SelectedIssuerProvider>
+    <AnonAadhaarProvider>
+      <SelectedIssuerProvider>
+        <Component {...pageProps} />
+      </SelectedIssuerProvider>
+    </AnonAadhaarProvider>
   );
 }
 
