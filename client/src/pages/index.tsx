@@ -7,6 +7,8 @@ import SelectedIssuerContext from "@/contexts/SelectedIssuerContext";
 import { useRouter } from "next/router";
 import { LaunchProveModal, useAnonAadhaar } from "@anon-aadhaar/react";
 
+const nullifierSeed = process.env.NEXT_PUBLIC_NULLIFIER_SEED!;
+
 const App = () => {
   const router = useRouter();
 
@@ -78,7 +80,7 @@ const App = () => {
       ) : (
         <Grid>
           <LaunchProveModal
-            nullifierSeed={1234}
+            nullifierSeed={Number(nullifierSeed)}
             buttonTitle="Generate your Anon Aaadhaar credential"
           />
         </Grid>
