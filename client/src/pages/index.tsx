@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Unstable_Grid2";
 import SelectedIssuerContext from "@/contexts/SelectedIssuerContext";
 import { useRouter } from "next/router";
-import { LaunchProveModal } from "@anon-aadhaar/react";
+import { LaunchProveModal, useAnonAadhaar } from "@anon-aadhaar/react";
 
 const App = () => {
   const router = useRouter();
@@ -17,11 +17,18 @@ const App = () => {
   const [issuerList, setIssuerList] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [anonAadhaar] = useAnonAadhaar();
   const { setSelectedIssuerContext } = useContext(SelectedIssuerContext);
 
   const handleSelectIssuer = (selectedIssuer: string) => {
     setSelectedIssuerContext(selectedIssuer);
   };
+
+  useEffect(() => {
+    if (anonAadhaar.status === "logged-in") {
+      setIsConnected(true);
+    }
+  }, [anonAadhaar]);
 
   useEffect(() => {
     const fetchIssuers = async () => {
@@ -72,7 +79,6 @@ const App = () => {
         <Grid>
           <LaunchProveModal
             nullifierSeed={1234}
-            useTestAadhaar={true}
             buttonTitle="Generate your Anon Aaadhaar credential"
           />
         </Grid>
