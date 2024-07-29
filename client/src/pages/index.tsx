@@ -28,6 +28,7 @@ const App = () => {
 
   useEffect(() => {
     if (anonAadhaar.status === "logged-in") {
+      console.log("aadhaar status: ", anonAadhaar.status);
       setIsConnected(true);
     }
   }, [anonAadhaar]);

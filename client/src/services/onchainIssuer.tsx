@@ -1,10 +1,6 @@
 import Web3 from "web3";
 import { Id } from "@iden3/js-iden3-core";
-import {
-  AnonAadhaarCore,
-  AnonAadhaarProof,
-  packGroth16Proof,
-} from "@anon-aadhaar/core";
+import { AnonAadhaarProof, packGroth16Proof } from "@anon-aadhaar/core";
 
 const contractABI = [
   {
@@ -1490,7 +1486,7 @@ export const issueCredential = async (
       nullifierSeed,
       anonAadhaarProof.nullifier,
       anonAadhaarProof.timestamp,
-      from,
+      1,
       [
         anonAadhaarProof.ageAbove18,
         anonAadhaarProof.gender,
@@ -1503,7 +1499,20 @@ export const issueCredential = async (
   const gasLimit = estimatedGas + (estimatedGas * BigInt(15)) / BigInt(100);
 
   await onchainNonMerklizedIssuer.methods
-    .issueCredential(userId.bigInt())
+    .issueCredential(
+      userId.bigInt(),
+      nullifierSeed,
+      anonAadhaarProof.nullifier,
+      anonAadhaarProof.timestamp,
+      1,
+      [
+        anonAadhaarProof.ageAbove18,
+        anonAadhaarProof.gender,
+        anonAadhaarProof.pincode,
+        anonAadhaarProof.state,
+      ],
+      packedGroth16Proof
+    )
     .send({ from, gas: gasLimit.toString() });
 };
 
@@ -1516,6 +1525,7 @@ export const getUserCredentialIds = async (
   const result = await contract.methods
     .getUserCredentialIds(userId.bigInt())
     .call();
+  console.log("Results from getUserCred: ", result);
   if (!Array.isArray(result)) {
     throw new Error("Invalid result");
   }

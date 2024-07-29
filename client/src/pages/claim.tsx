@@ -14,6 +14,7 @@ import { selectMetamaskWallet } from "@/services/metamask";
 import {
   issueCredential,
   getUserCredentialIds,
+  getCredential,
 } from "@/services/onchainIssuer";
 import { Selecter, ErrorPopup } from "@/app/components";
 import SelectedIssuerContext from "@/contexts/SelectedIssuerContext";
@@ -57,11 +58,16 @@ const App = () => {
     const issuerDid = DID.parse(selectedIssuerContext);
     const issuerId = DID.idFromDID(issuerDid);
     const issuerAddress = Hex.encodeString(Id.ethAddressFromId(issuerId));
+    console.log("Issuer Address: ", issuerAddress);
     setIssuerInfo({ did: issuerDid, id: issuerId, address: issuerAddress });
 
     const userDid = DID.parse(router.query.userID as string);
     const userId = DID.idFromDID(userDid);
     setUserInfo({ did: userDid, id: userId });
+
+    getCredential(issuerAddress, userId, "0")
+      .then((resp) => console.log(resp))
+      .catch((e) => console.log(e));
 
     getUserCredentialIds(issuerAddress, userId)
       .then((credentials) => {
@@ -113,6 +119,8 @@ const App = () => {
         return;
       }
 
+      console.log("Proof sent to issuer: ", latestProof.proof);
+
       await issueCredential(
         issuerInfo.address,
         userInfo.id,
@@ -124,12 +132,15 @@ const App = () => {
       );
       const lastIssuedCredential = credentialIds[credentialIds.length - 1];
 
+      console.log("lastIssuedCredential: ", lastIssuedCredential);
+
       router.push(
         `/offer?claimId=${lastIssuedCredential}&issuer=${selectedIssuerContext}&subject=${
           routerQuery.userID as string
         }&contractAddress=${issuerInfo.address}`
       );
     } catch (error) {
+      console.log(error);
       setError(`Failed to issue onchain credential: ${error}`);
     } finally {
       setIsLoaded(false);
