@@ -20,7 +20,13 @@ import { Selecter, ErrorPopup } from "@/app/components";
 import SelectedIssuerContext from "@/contexts/SelectedIssuerContext";
 import { DID, Id } from "@iden3/js-iden3-core";
 import { Hex } from "@iden3/js-crypto";
-import { useProver } from "@anon-aadhaar/react";
+import {
+  LaunchProveModal,
+  useAnonAadhaar,
+  useProver,
+} from "@anon-aadhaar/react";
+
+const nullifierSeed = process.env.NEXT_PUBLIC_NULLIFIER_SEED!;
 
 interface IssuerInfo {
   did: DID;
@@ -42,11 +48,20 @@ const App = () => {
   );
   const [selectedCredentialId, setSelectedCredentialId] = useState<string>("");
   const [issuerInfo, setIssuerInfo] = useState<IssuerInfo | null>(null);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [anonAadhaar] = useAnonAadhaar();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [, latestProof] = useProver();
   const [metamaskWalletAddress, setMetamaskwalletAddress] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (anonAadhaar.status === "logged-in") {
+      console.log("aadhaar status: ", anonAadhaar.status);
+      setIsConnected(true);
+    }
+  }, [anonAadhaar]);
 
   const { selectedIssuerContext } = useContext(SelectedIssuerContext);
   useEffect(() => {
@@ -199,23 +214,33 @@ const App = () => {
         </Box>
       )}
 
-      {metamaskWalletAddress && (
-        <Grid
-          container
-          direction="column"
-          alignItems="center"
-          textAlign="center"
-        >
-          <Typography variant="h6">Wallet: {metamaskWalletAddress}</Typography>
-          <Button
-            onClick={issueOnchainCredential}
-            variant="contained"
-            size="large"
+      {metamaskWalletAddress &&
+        (isConnected ? (
+          <Grid
+            container
+            direction="column"
+            alignItems="center"
+            textAlign="center"
           >
-            Issue onchain credential
-          </Button>
-        </Grid>
-      )}
+            <Typography variant="h6">
+              Wallet: {metamaskWalletAddress}
+            </Typography>
+            <Button
+              onClick={issueOnchainCredential}
+              variant="contained"
+              size="large"
+            >
+              Issue onchain credential
+            </Button>
+          </Grid>
+        ) : (
+          <Grid>
+            <LaunchProveModal
+              nullifierSeed={Number(nullifierSeed)}
+              buttonTitle="Generate your Anon Aaadhaar credential"
+            />
+          </Grid>
+        ))}
 
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
