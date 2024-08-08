@@ -27,7 +27,7 @@ export const issueCredential = async (
         nullifierSeed,
         anonAadhaarProof.nullifier,
         anonAadhaarProof.timestamp,
-        1,
+        accounts[0],
         [
           anonAadhaarProof.ageAbove18,
           anonAadhaarProof.gender,
@@ -39,7 +39,6 @@ export const issueCredential = async (
       .estimateGas({ from });
     const estimatedGasLimit =
       estimatedGas + (estimatedGas * BigInt(50)) / BigInt(100);
-    console.log("Estimated gas limit: ", estimatedGasLimit);
 
     await onchainNonMerklizedIssuer.methods
       .issueCredential(
@@ -47,7 +46,7 @@ export const issueCredential = async (
         nullifierSeed,
         anonAadhaarProof.nullifier,
         anonAadhaarProof.timestamp,
-        1,
+        accounts[0],
         [
           anonAadhaarProof.ageAbove18,
           anonAadhaarProof.gender,

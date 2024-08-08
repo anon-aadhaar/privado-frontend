@@ -240,6 +240,7 @@ const App = () => {
                 "revealPinCode",
                 "revealState",
               ]}
+              signal={metamaskWalletAddress}
             />
           </Grid>
         ))}
