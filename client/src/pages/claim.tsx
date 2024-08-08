@@ -134,8 +134,6 @@ const App = () => {
         return;
       }
 
-      console.log("Proof sent to issuer: ", latestProof.proof);
-
       await issueCredential(
         issuerInfo.address,
         userInfo.id,
@@ -146,8 +144,6 @@ const App = () => {
         userInfo.id
       );
       const lastIssuedCredential = credentialIds[credentialIds.length - 1];
-
-      console.log("lastIssuedCredential: ", lastIssuedCredential);
 
       router.push(
         `/offer?claimId=${lastIssuedCredential}&issuer=${selectedIssuerContext}&subject=${
@@ -238,6 +234,12 @@ const App = () => {
             <LaunchProveModal
               nullifierSeed={Number(nullifierSeed)}
               buttonTitle="Generate your Anon Aaadhaar credential"
+              fieldsToReveal={[
+                "revealAgeAbove18",
+                "revealGender",
+                "revealPinCode",
+                "revealState",
+              ]}
             />
           </Grid>
         ))}
