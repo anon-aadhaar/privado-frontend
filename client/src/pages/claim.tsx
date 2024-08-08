@@ -58,7 +58,6 @@ const App = () => {
 
   useEffect(() => {
     if (anonAadhaar.status === "logged-in") {
-      console.log("aadhaar status: ", anonAadhaar.status);
       setIsConnected(true);
     }
   }, [anonAadhaar]);
@@ -73,16 +72,11 @@ const App = () => {
     const issuerDid = DID.parse(selectedIssuerContext);
     const issuerId = DID.idFromDID(issuerDid);
     const issuerAddress = Hex.encodeString(Id.ethAddressFromId(issuerId));
-    console.log("Issuer Address: ", issuerAddress);
     setIssuerInfo({ did: issuerDid, id: issuerId, address: issuerAddress });
 
     const userDid = DID.parse(router.query.userID as string);
     const userId = DID.idFromDID(userDid);
     setUserInfo({ did: userDid, id: userId });
-
-    getCredential(issuerAddress, userId, "0")
-      .then((resp) => console.log(resp))
-      .catch((e) => console.log(e));
 
     getUserCredentialIds(issuerAddress, userId)
       .then((credentials) => {

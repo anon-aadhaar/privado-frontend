@@ -71,7 +71,6 @@ export const getUserCredentialIds = async (
   const result = await contract.methods
     .getUserCredentialIds(userId.bigInt())
     .call();
-  console.log("Results from getUserCred: ", result);
   if (!Array.isArray(result)) {
     throw new Error("Invalid result");
   }
@@ -101,6 +100,5 @@ export const getCredential = async (
     data: data,
   };
   const resultHex = await web3.eth.call(transactionObject);
-  console.log("Raw hex result", resultHex);
   return resultHex;
 };
