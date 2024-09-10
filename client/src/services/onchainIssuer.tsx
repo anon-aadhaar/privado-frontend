@@ -21,24 +21,9 @@ export const issueCredential = async (
   const packedGroth16Proof = packGroth16Proof(anonAadhaarProof.groth16Proof);
 
   try {
-    const estimatedGas = await onchainNonMerklizedIssuer.methods
-      .issueCredential(
-        userId.bigInt(),
-        nullifierSeed,
-        anonAadhaarProof.nullifier,
-        anonAadhaarProof.timestamp,
-        accounts[0],
-        [
-          anonAadhaarProof.ageAbove18,
-          anonAadhaarProof.gender,
-          anonAadhaarProof.pincode,
-          anonAadhaarProof.state,
-        ],
-        packedGroth16Proof
-      )
-      .estimateGas({ from });
-    const estimatedGasLimit =
-      estimatedGas + (estimatedGas * BigInt(50)) / BigInt(100);
+    
+    const gasPrice = await web3.eth.getGasPrice();
+    const priorityGasPrice = gasPrice * BigInt(150) / BigInt(100);
 
     await onchainNonMerklizedIssuer.methods
       .issueCredential(
@@ -55,7 +40,10 @@ export const issueCredential = async (
         ],
         packedGroth16Proof
       )
-      .send({ from, gas: estimatedGasLimit.toString() });
+      .send({ 
+        from, 
+        maxPriorityFeePerGas: priorityGasPrice.toString(),
+      });
   } catch (e) {
     console.error("Error estimating gas or sending transaction:", e);
     throw e;
