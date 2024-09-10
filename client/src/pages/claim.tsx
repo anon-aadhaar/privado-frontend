@@ -76,6 +76,7 @@ const App = () => {
 
     const userDid = DID.parse(router.query.userID as string);
     const userId = DID.idFromDID(userDid);
+    console.log("USER ID: ", userId.string());
     setUserInfo({ did: userDid, id: userId });
 
     getUserCredentialIds(issuerAddress, userId)
@@ -225,17 +226,19 @@ const App = () => {
           </Grid>
         ) : (
           <Grid>
-            <LaunchProveModal
-              nullifierSeed={Number(nullifierSeed)}
-              buttonTitle="Generate your Anon Aaadhaar credential"
-              fieldsToReveal={[
-                "revealAgeAbove18",
-                "revealGender",
-                "revealPinCode",
-                "revealState",
-              ]}
-              signal={metamaskWalletAddress}
-            />
+            {userInfo && (
+              <LaunchProveModal
+                nullifierSeed={Number(nullifierSeed)}
+                buttonTitle="Generate your Anon Aaadhaar credential"
+                fieldsToReveal={[
+                  "revealAgeAbove18",
+                  "revealGender",
+                  "revealPinCode",
+                  "revealState",
+                ]}
+                signal={userInfo?.id.string()}
+              />
+            )}
           </Grid>
         ))}
 
