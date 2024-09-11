@@ -32,6 +32,6 @@ jobs:
         run: |
           .github/scripts/build.sh
 
-      - name: Create Deployment
+      - name: Trigger ECS Deployment
         run: |
           .github/scripts/deploy.sh
