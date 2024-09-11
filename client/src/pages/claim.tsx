@@ -76,7 +76,6 @@ const App = () => {
 
     const userDid = DID.parse(router.query.userID as string);
     const userId = DID.idFromDID(userDid);
-    console.log("USER ID: ", userId.string());
     setUserInfo({ did: userDid, id: userId });
 
     getUserCredentialIds(issuerAddress, userId)
@@ -234,9 +233,8 @@ const App = () => {
                   "revealAgeAbove18",
                   "revealGender",
                   "revealPinCode",
-                  "revealState",
                 ]}
-                signal={userInfo?.id.string()}
+                signal={metamaskWalletAddress}
               />
             )}
           </Grid>
