@@ -9,8 +9,8 @@ docker build --build-arg "NEXT_PUBLIC_ISSUER_URL=$ISSUER_URL" -t anon-aadhaar-cl
 docker tag anon-aadhaar-client:latest 490752553772.dkr.ecr.eu-central-1.amazonaws.com/anon-aadhaar-client:latest
 docker push 490752553772.dkr.ecr.eu-central-1.amazonaws.com/anon-aadhaar-client:latest
 
-docker build -t anon-aadhaar-onchain-non-merklized-issuer .
-docker tag anon-aadhaar-onchain-non-merklized-issuer:latest 490752553772.dkr.ecr.eu-central-1.amazonaws.com/anon-aadhaar-onchain-non-merklized-issuer:latest
-docker push 490752553772.dkr.ecr.eu-central-1.amazonaws.com/anon-aadhaar-onchain-non-merklized-issuer:latest
+docker build -t anon-aadhaar-issuer .
+docker tag anon-aadhaar-issuer:latest 490752553772.dkr.ecr.eu-central-1.amazonaws.com/anon-aadhaar-issuer:latest
+docker push 490752553772.dkr.ecr.eu-central-1.amazonaws.com/anon-aadhaar-issuer:latest
 
 exit 0
