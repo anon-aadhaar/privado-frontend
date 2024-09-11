@@ -1,4 +1,5 @@
 FROM node:21
+RUN apt-get update ; apt-get install -y netcat-openbsd
 
 WORKDIR /app
 
