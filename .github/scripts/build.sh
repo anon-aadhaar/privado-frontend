@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-ISSUER_URL="https://issuer-anon-aadhaar.pse.dev"
+ISSUER_URL="https://issuer.anon-aadhaar.pse.dev"
 
 aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 490752553772.dkr.ecr.eu-central-1.amazonaws.com
 
