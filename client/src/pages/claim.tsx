@@ -26,6 +26,9 @@ import {
   useProver,
 } from "@anon-aadhaar/react";
 
+const nullifierSeed = process.env.NEXT_PUBLIC_NULLIFIER_SEED || "";
+console.log("Seed loaded in the frontend: ", nullifierSeed);
+
 interface IssuerInfo {
   did: DID;
   id: Id;
@@ -225,7 +228,7 @@ const App = () => {
           <Grid>
             {userInfo && (
               <LaunchProveModal
-                nullifierSeed={Number(process.env.NEXT_PUBLIC_NULLIFIER_SEED!)}
+                nullifierSeed={Number(nullifierSeed)}
                 buttonTitle="Generate your Anon Aaadhaar credential"
                 fieldsToReveal={[
                   "revealAgeAbove18",
