@@ -56,8 +56,6 @@ const App = () => {
   const [metamaskWalletAddress, setMetamaskwalletAddress] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
 
-  console.log("Seed loaded in the frontend: ", nullifierSeed);
-
   useEffect(() => {
     if (anonAadhaar.status === "logged-in") {
       setIsConnected(true);

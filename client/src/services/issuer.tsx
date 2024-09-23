@@ -11,7 +11,6 @@ interface ApiError extends Error {
 
 export async function getIssuersList(): Promise<string[]> {
   try {
-    console.log("Issuer loaded in the frontend: ", OnchainIssuerNodeHost);
     const response = await axios.get<string[]>(
       `${OnchainIssuerNodeHost}/api/v1/issuers`
     );
@@ -33,7 +32,6 @@ export async function produceAuthQRCode(
     if (!issuer) {
       throw new Error("Issuer is not defined");
     }
-    console.log("Issuer loaded in the frontend: ", OnchainIssuerNodeHost);
     const url = new URL(`${OnchainIssuerNodeHost}/api/v1/requests/auth`);
     url.search = new URLSearchParams({ issuer: issuer }).toString();
     const response = await axios.get<any>(url.toString());
@@ -54,7 +52,6 @@ export async function checkAuthSessionStatus(
   sessionId: string
 ): Promise<AuthSessionStatusResponse | null> {
   try {
-    console.log("Issuer loaded in the frontend: ", OnchainIssuerNodeHost);
     const url = new URL(`${OnchainIssuerNodeHost}/api/v1/status`);
     url.search = new URLSearchParams({ id: sessionId }).toString();
     const response = await axios.get<any>(url.toString());
