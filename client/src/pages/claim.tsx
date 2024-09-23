@@ -27,7 +27,6 @@ import {
 } from "@anon-aadhaar/react";
 
 const nullifierSeed = process.env.NEXT_PUBLIC_NULLIFIER_SEED || "";
-console.log("Seed loaded in the frontend: ", nullifierSeed);
 
 interface IssuerInfo {
   did: DID;
@@ -56,6 +55,8 @@ const App = () => {
   const [, latestProof] = useProver();
   const [metamaskWalletAddress, setMetamaskwalletAddress] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+
+  console.log("Seed loaded in the frontend: ", nullifierSeed);
 
   useEffect(() => {
     if (anonAadhaar.status === "logged-in") {

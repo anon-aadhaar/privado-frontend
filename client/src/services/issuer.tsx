@@ -1,16 +1,20 @@
-import axios from 'axios';
+import axios from "axios";
 
-const OnchainIssuerNodeHost = process.env.NEXT_PUBLIC_ISSUER_URL || 'http://localhost:8080';
+const OnchainIssuerNodeHost =
+  process.env.NEXT_PUBLIC_ISSUER_URL || "http://localhost:8080";
 
 interface ApiError extends Error {
-    response?: {
-        status: number;
-    };
+  response?: {
+    status: number;
+  };
 }
 
 export async function getIssuersList(): Promise<string[]> {
   try {
-    const response = await axios.get<string[]>(`${OnchainIssuerNodeHost}/api/v1/issuers`);
+    console.log("Issuer loaded in the frontend: ", OnchainIssuerNodeHost);
+    const response = await axios.get<string[]>(
+      `${OnchainIssuerNodeHost}/api/v1/issuers`
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -18,21 +22,24 @@ export async function getIssuersList(): Promise<string[]> {
 }
 
 interface AuthQRCodeResponse {
-    data: any;
-    sessionId: string;
+  data: any;
+  sessionId: string;
 }
 
-export async function produceAuthQRCode(issuer: string): Promise<AuthQRCodeResponse> {
+export async function produceAuthQRCode(
+  issuer: string
+): Promise<AuthQRCodeResponse> {
   try {
     if (!issuer) {
-      throw new Error('Issuer is not defined');
+      throw new Error("Issuer is not defined");
     }
+    console.log("Issuer loaded in the frontend: ", OnchainIssuerNodeHost);
     const url = new URL(`${OnchainIssuerNodeHost}/api/v1/requests/auth`);
     url.search = new URLSearchParams({ issuer: issuer }).toString();
     const response = await axios.get<any>(url.toString());
     return {
       data: response.data,
-      sessionId: response.headers['x-id'],
+      sessionId: response.headers["x-id"],
     };
   } catch (error) {
     throw error;
@@ -40,11 +47,14 @@ export async function produceAuthQRCode(issuer: string): Promise<AuthQRCodeRespo
 }
 
 interface AuthSessionStatusResponse {
-    id: string;
+  id: string;
 }
 
-export async function checkAuthSessionStatus(sessionId: string): Promise<AuthSessionStatusResponse | null> {
+export async function checkAuthSessionStatus(
+  sessionId: string
+): Promise<AuthSessionStatusResponse | null> {
   try {
+    console.log("Issuer loaded in the frontend: ", OnchainIssuerNodeHost);
     const url = new URL(`${OnchainIssuerNodeHost}/api/v1/status`);
     url.search = new URLSearchParams({ id: sessionId }).toString();
     const response = await axios.get<any>(url.toString());
