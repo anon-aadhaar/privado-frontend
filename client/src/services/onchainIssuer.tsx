@@ -21,9 +21,8 @@ export const issueCredential = async (
   const packedGroth16Proof = packGroth16Proof(anonAadhaarProof.groth16Proof);
 
   try {
-    
     const gasPrice = await web3.eth.getGasPrice();
-    const priorityGasPrice = gasPrice * BigInt(150) / BigInt(100);
+    const priorityGasPrice = (gasPrice * BigInt(150)) / BigInt(100);
 
     await onchainNonMerklizedIssuer.methods
       .issueCredential(
@@ -31,7 +30,7 @@ export const issueCredential = async (
         nullifierSeed,
         anonAadhaarProof.nullifier,
         anonAadhaarProof.timestamp,
-        accounts[0],
+        from,
         [
           anonAadhaarProof.ageAbove18,
           anonAadhaarProof.gender,
@@ -40,8 +39,8 @@ export const issueCredential = async (
         ],
         packedGroth16Proof
       )
-      .send({ 
-        from, 
+      .send({
+        from,
         maxPriorityFeePerGas: priorityGasPrice.toString(),
       });
   } catch (e) {
